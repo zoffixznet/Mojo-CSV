@@ -18,6 +18,19 @@ END { unlink CSV_TEMP };
         qw/new  slurp  slurp_body  row  spurt  text  trickle  in  out  flush/;
 }
 
+{   # Fluidity
+    my $csv = Mojo::CSV->new;
+    my $c = 'Mojo::CSV';
+    isa_ok $csv,                               $c, 'isa ->new';
+    isa_ok $csv->in(Mojo::Asset::Memory->new), $c, 'isa ->in';
+    isa_ok $csv->out( CSV_TEMP ),              $c, 'isa ->out';
+    isa_ok $csv->trickle([42]),                $c, 'isa ->trickle';
+    isa_ok $csv->spurt([[42]]),                $c, 'isa ->spurt';
+    isa_ok $csv->flush,                        $c, 'isa ->flush';
+
+    unlink CSV_TEMP;
+}
+
 { # Slurping CSV
     my $expected = sample_csv();
     my @in = (

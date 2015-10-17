@@ -6,6 +6,7 @@ use Text::CSV;
 use Scalar::Util qw/reftype/;
 
 use Moo;
+use MooX::ChainedAttributes;
 use strictures 2;
 use namespace::clean;
 
@@ -13,10 +14,12 @@ use namespace::clean;
 
 has in  => (
     is      => 'rw',
+    chained => 1,
     coerce => sub { __get_fh( $_[0], '<' ); }
 );
 has out  => (
     is      => 'rw',
+    chained => 1,
     coerce => sub { __get_fh( $_[0], '>' ); }
 );
 has _obj => (
@@ -47,7 +50,12 @@ sub __get_fh {
     return $fh;
 }
 
-sub flush { close shift->out };
+sub flush {
+    my $self = shift;
+    close $self->out;
+
+    $self;
+}
 
 sub row {
     my $self = shift;
