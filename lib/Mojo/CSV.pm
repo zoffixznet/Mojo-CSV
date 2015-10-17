@@ -21,7 +21,7 @@ has out  => (
 );
 has _obj => (
     is      => 'ro',
-    default => sub { Text::CSV_XS->new({ binary => 1 }) },
+    default => sub { Text::CSV->new({ binary => 1 }) },
 );
 
 sub __get_fh {
