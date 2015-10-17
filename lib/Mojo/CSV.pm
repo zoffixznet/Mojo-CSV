@@ -176,14 +176,6 @@ Read and write CSV (Comma Separated Values) like a boss, Mojo style.
 
 Unless otherwise indicated, all methods return their invocant.
 
-=head2 C<new>
-
-    Mojo::CSV->new;
-    Mojo::CSV->new( in => 'file.csv', out => 'file.csv' );
-
-Creates a new C<Mojo::CSV> object. Takes two optional arguments. See
-L</in> and L</out> for details.
-
 =head2 C<flush>
 
     $csv->flush;
@@ -203,9 +195,17 @@ C<Mojo::CSV> object is destroyed.
     $csv->in( Mojo::Asset::File->new(path => 'file.csv') );
     $csv->in( Mojo::Asset::Memory->new->add_chunk('foo,bar,baz') );
 
-Specifies the input for L</slurp> and L</row>. Takes a filename,
-an opened filehandle, a L<Mojo::Asset::File> object, or
+Specifies the input for L</slurp>, L</slurp_body> and L</row>.
+Takes a filename, an opened filehandle, a L<Mojo::Asset::File> object, or
 a L<Mojo::Asset::Memory> object.
+
+=head2 C<new>
+
+    Mojo::CSV->new;
+    Mojo::CSV->new( in => 'file.csv', out => 'file.csv' );
+
+Creates a new C<Mojo::CSV> object. Takes two optional arguments. See
+L</in> and L</out> for details.
 
 =head2 C<out>
 
