@@ -59,7 +59,9 @@ END { unlink CSV_TEMP };
 { # Spurting CSV
     unlink CSV_TEMP;
     Mojo::CSV->new( out => CSV_TEMP )->spurt( sample_csv() );
-    is slurp(CSV_TEMP), slurp(CSV_FILE), '->spurt file matches expectations';
+    is slurp(CSV_TEMP),
+        slurp(CSV_FILE) =~ s/\r\n|\r\n/\n/gr,
+        '->spurt file matches expectations';
 }
 
 { # Writing line-by-line
@@ -68,7 +70,9 @@ END { unlink CSV_TEMP };
     my $csv = Mojo::CSV->new( out => CSV_TEMP );
     $csv->trickle( $_ ) for @$sample;
     $csv->flush;
-    is slurp(CSV_TEMP), slurp(CSV_FILE), '->trickle file matches expectations';
+    is slurp(CSV_TEMP),
+        slurp(CSV_FILE) =~ s/\r\n|\r\n/\n/gr,
+        '->trickle file matches expectations';
 
     throws_ok { Mojo::CSV->new->trickle( 42 ) }
         qr/You must specify where to write/,
