@@ -53,7 +53,7 @@ Creates a new `Mojo::CSV` object. Takes two optional arguments. See
 
     $csv->flush;
 
-Closes ["out"](#out) filehandle. Call this when you're done [spurting](#spurt) or
+Flushes buffer and closes ["out"](#out) filehandle. Call this when you're done
 [trickling](#trickle) data. This will be done automatically when the
 `Mojo::CSV` object is destroyed.
 
@@ -113,7 +113,8 @@ A shortcut for calling ["slurp"](#slurp) and discarding the first row
     Mojo::CSV->new( out => 'file.csv' )->spurt( $data );
 
 Writes a data structure into CSV. `$data` is an arrayref of rows, which
-are themselves arrayrefs (each item is a cell data).
+are themselves arrayrefs (each item is a cell data). It will call
+["flush"](#flush) on completion. See also ["trickle"](#trickle).
 
 ## `text`
 
@@ -133,7 +134,8 @@ row or an arrayref of arrayrefs to include multiple rows.
     my $csv = Mojo::CSV->new( out => 'file.csv' );
     $csv->trickle( $_ ) for @data;
 
-Writes out a single row of CSV. Takes an arrayref of cell values.
+Writes out a single row of CSV. Takes an arrayref of cell values. Note that
+the writes may be buffered (see ["flush"](#flush))
 
 # SEE ALSO
 
