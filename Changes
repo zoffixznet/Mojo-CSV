@@ -4,6 +4,7 @@ Revision history for Mojo-CSV
   - Fix failures when Text::CSV_XS is not installed (#2)
   - Fix non-fluid methods (#1)
   - Fix Windows test failures
+  - "spurt" now auto-flushes on complete
 
 1.001001  2015-10-16
   - First version released on an unsuspecting world

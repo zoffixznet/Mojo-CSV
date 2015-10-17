@@ -87,6 +87,7 @@ sub spurt {
     my $what = shift;
     @_ and $self->out( shift );
     $self->trickle( $_ ) for @$what;
+    $self->flush;
 
     $self;
 }
@@ -187,7 +188,7 @@ L</in> and L</out> for details.
 
     $csv->flush;
 
-Closes L</out> filehandle. Call this when you're done L<spurting|/spurt> or
+Flushes buffer and closes L</out> filehandle. Call this when you're done
 L<trickling|/trickle> data. This will be done automatically when the
 C<Mojo::CSV> object is destroyed.
 
@@ -247,7 +248,8 @@ A shortcut for calling L</slurp> and discarding the first row
     Mojo::CSV->new( out => 'file.csv' )->spurt( $data );
 
 Writes a data structure into CSV. C<$data> is an arrayref of rows, which
-are themselves arrayrefs (each item is a cell data).
+are themselves arrayrefs (each item is a cell data). It will call
+L</flush> on completion. See also L</trickle>.
 
 =head2 C<text>
 
@@ -267,7 +269,8 @@ L<Arrayref-like things|Mojo::Collection> should work too.
     my $csv = Mojo::CSV->new( out => 'file.csv' );
     $csv->trickle( $_ ) for @data;
 
-Writes out a single row of CSV. Takes an arrayref of cell values.
+Writes out a single row of CSV. Takes an arrayref of cell values. Note that
+the writes may be buffered (see L</flush>)
 
 =head1 SEE ALSO
 
