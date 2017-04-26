@@ -1,5 +1,9 @@
 Revision history for Mojo-CSV
 
+1.001003  2017-04-26
+  - Fix test failures on latest Mojolicious
+  - Bump Mojolicious prereq version
+
 1.001002  2015-10-17
   - Fix failures when Text::CSV_XS is not installed (#2)
   - Fix non-fluid methods (#1)

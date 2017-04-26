@@ -3,7 +3,7 @@
 use Test::Most;
 use Mojo::Asset::File;
 use Mojo::Asset::Memory;
-use Mojo::Util qw/slurp/;
+use Mojo::File qw/path/;
 use File::Temp ();
 
 use constant CSV_FILE => 't/sample.csv';
@@ -41,7 +41,7 @@ END { unlink CSV_TEMP };
             'Mojo::Asset::File',
         ],
         [
-            Mojo::Asset::Memory->new->add_chunk( slurp CSV_FILE ),
+            Mojo::Asset::Memory->new->add_chunk( path(CSV_FILE)->slurp ),
             'Mojo::Asset::Memory',
         ],
     );
@@ -72,8 +72,8 @@ END { unlink CSV_TEMP };
 { # Spurting CSV
     unlink CSV_TEMP;
     Mojo::CSV->new( out => CSV_TEMP )->spurt( sample_csv() );
-    ( my $csv_file = slurp(CSV_FILE) ) =~ s/\r\n|\r\n/\n/g;
-    is slurp(CSV_TEMP), $csv_file, '->spurt file matches expectations';
+    ( my $csv_file = path(CSV_FILE)->slurp ) =~ s/\r\n|\r\n/\n/g;
+    is path(CSV_TEMP)->slurp, $csv_file, '->spurt file matches expectations';
 }
 
 { # Writing line-by-line
@@ -82,8 +82,8 @@ END { unlink CSV_TEMP };
     my $csv = Mojo::CSV->new( out => CSV_TEMP );
     $csv->trickle( $_ ) for @$sample;
     $csv->flush;
-    ( my $csv_file = slurp(CSV_FILE) ) =~ s/\r\n|\r\n/\n/g;
-    is slurp(CSV_TEMP), $csv_file, '->trickle file matches expectations';
+    ( my $csv_file = path(CSV_FILE)->slurp ) =~ s/\r\n|\r\n/\n/g;
+    is path(CSV_TEMP)->slurp, $csv_file, '->trickle file matches expectations';
 
     throws_ok { Mojo::CSV->new->trickle( 42 ) }
         qr/You must specify where to write/,
@@ -93,7 +93,7 @@ END { unlink CSV_TEMP };
 { # Text
     my $sample = sample_csv();
     my $csv = Mojo::CSV->new;
-    chomp( my $expected = slurp(CSV_FILE) );
+    chomp( my $expected = path(CSV_FILE)->slurp );
     is $csv->text($sample), $expected, '->text on rows matches expectations';
 
     my @lines = split m{$/}, $expected;
