@@ -79,7 +79,7 @@ sub slurp {
 sub slurp_body {
     my $self = shift;
     my $r = $self->slurp( @_ );
-    return $r->slice( 1 .. $r->size-1 );
+    return c @$r[ 1 .. $r->size-1 ];
 }
 
 sub spurt {
